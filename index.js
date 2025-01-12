@@ -4,20 +4,7 @@ const Joi = require("joi");
 
 app.use(express.json());
 
-const students = [
-  {
-    id: 1,
-    name: "John Doe",
-    age: 21,
-    grade: "A",
-  },
-  {
-    id: 2,
-    name: "Alex Smith",
-    age: 20,
-    grade: "B",
-  },
-];
+const students = [];
 
 app.get("/", (req, res) => {
   res.send("Welcome to the API!");
