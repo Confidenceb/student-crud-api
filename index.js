@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const Joi = require("joi");
+require("dotenv").config();
+const logger = require("./logger");
 
 app.use(express.json());
 
@@ -22,6 +24,15 @@ app.get("/api/v1/students/:id", (req, res) => {
     return res.status(404).send("student not found");
   }
   res.send(student);
+});
+
+// Health checkpoint
+
+app.get("/healthcheck", (req, res) => {
+  res.send({
+    status: "UP",
+    timestamp: new Date(),
+  });
 });
 
 // Add student data
@@ -111,5 +122,17 @@ app.delete("/api/v1/students/:id", (req, res) => {
   });
 });
 
-port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on ${port}`));
+// Logger
+
+app.get("/", (req, res) => {
+  logger.info("Home route accessed");
+  res.send("Welcome to the API!");
+});
+
+app.use((err, req, res, next) => {
+  logger.error(err.message);
+  res.status(500).send("Something went wrong!");
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}`));
