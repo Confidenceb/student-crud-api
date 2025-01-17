@@ -1,0 +1,10 @@
+[2025-01-16T10:09:10.039Z] INFO: Student added: {"id":1,"name":"Noibi Abdulrasaq","age":25,"grade":"A1"}
+[2025-01-16T10:09:42.359Z] WARN: Validation failed: "age" must be greater than or equal to 15
+[2025-01-16T10:09:54.285Z] INFO: Student added: {"id":2,"name":"Noibi Jamiu","age":17,"grade":"A1"}
+[2025-01-16T10:10:13.113Z] INFO: Student added: {"id":3,"name":"John Doe","age":20,"grade":"B2"}
+[2025-01-16T10:10:56.539Z] ERROR: id is not defined
+[2025-01-16T10:11:07.022Z] ERROR: id is not defined
+[2025-01-16T10:11:42.575Z] ERROR: id is not defined
+[2025-01-16T10:12:38.625Z] INFO: Student added: {"id":1,"name":"John Doe","age":20,"grade":"B2"}
+[2025-01-16T10:12:55.968Z] INFO: Student added: {"id":2,"name":"John Oluwaseun","age":20,"grade":"A2"}
+[2025-01-16T10:16:06.720Z] WARN: Validation failed: "age" must be a number

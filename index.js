@@ -20,6 +20,9 @@ app.get("/api/v1/students", (req, res) => {
 // Get student by ID
 app.get("/api/v1/students/:id", (req, res) => {
   const student = students.find((c) => c.id === parseInt(req.params.id));
+  // if (isNaN(id)) {
+  //   return res.status(400).send("Invalid ID format");
+  // }
   if (!student) {
     return res.status(404).send("student not found");
   }
@@ -48,6 +51,7 @@ app.post("/api/v1/students", (req, res) => {
 
   if (error) {
     // Handle the validation error
+    logger.warn(`Validation failed: ${error.details[0].message}`);
     res.status(400).send(error.details[0].message);
     return;
   }
@@ -63,6 +67,7 @@ app.post("/api/v1/students", (req, res) => {
 
   students.push(student);
   // res.send(student);
+  logger.info(`Student added: ${JSON.stringify(student)}`);
   res.send({
     success: true,
     message: "Student successfully added",
