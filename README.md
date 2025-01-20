@@ -1,6 +1,6 @@
-### Student CRUD API
+# Student CRUD API
 
-# A simple API to manage student records (Create, Read, Update, Delete) built with Node.js, Express, PostgreSQL, and Unit Testing with Jest
+### A simple API to manage student records (Create, Read, Update, Delete) built with Node.js, Express, PostgreSQL, and Unit Testing with Jest
 
 Table of Contents
 Installation
@@ -18,19 +18,19 @@ bash
 Copy
 Edit
 
-# Clone the repository
+### Clone the repository
 
 git clone <repo-url>
 
-# Install dependencies
+### Install dependencies
 
 npm install
 
-# Start the server
+### Start the server
 
 npm start
 
-# Features
+### Features
 
 Create, Read, Update, and Delete students.
 Input validation with Joi.
@@ -38,7 +38,7 @@ API logging with Winston.
 PostgreSQL database integration.
 Unit testing with Jest.
 
-# API Endpoints
+### API Endpoints
 
 HTTP Method Endpoint Description
 GET /api/v1/students - Get all students
@@ -47,7 +47,7 @@ POST /api/v1/students - Add a new student
 PUT /api/v1/students/:id - Update a student by ID
 DELETE /api/v1/students/:id - Delete a student by ID
 
-# Dependencies
+### Dependencies
 
 express: Web framework for building the API.
 nodemon: Automatically restart server on code changes.
@@ -64,7 +64,7 @@ bash
 Copy
 Edit
 
-# Run the tests
+### Run the tests
 
 npm test
 Unit tests include verifying CRUD operations for students.
