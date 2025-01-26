@@ -1,0 +1,17 @@
+version: "3.8"
+services:
+  app:
+    image: student-api
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - student-data:/usr/src/app/studentData.db
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+
+volumes:
+  student-data:

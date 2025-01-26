@@ -10,6 +10,13 @@ app.use(express.json());
 
 const students = [];
 
+// Define the Joi validation schema
+const studentSchema = Joi.object({
+  name: Joi.string().min(3).required(),
+  age: Joi.number().min(15).required(),
+  grade: Joi.string().required(),
+});
+
 app.get("/", (req, res) => {
   res.send("Welcome to the API!");
 });
@@ -109,6 +116,13 @@ app.get("/healthcheck", (req, res) => {
 // });
 
 app.post("/api/v1/students", (req, res) => {
+  // Validate input
+  const { error } = studentSchema.validate(req.body, { convert: false });
+  if (error) {
+    logger.warn(`Validation failed: ${error.details[0].message}`);
+    return res.status(400).send(error.details[0].message);
+  }
+
   const { name, age, grade } = req.body;
   const sql = `INSERT INTO Students (name, age, grade) VALUES(?, ?, ?)`;
   db.run(sql, [name, age, grade], function (err) {
@@ -126,6 +140,13 @@ app.post("/api/v1/students", (req, res) => {
 
 // Edit existing student data
 app.put("/api/v1/students/:id", (req, res) => {
+  // Validate input
+  const { error } = studentSchema.validate(req.body, { convert: false });
+  if (error) {
+    logger.warn(`Validation failed: ${error.details[0].message}`);
+    return res.status(400).send(error.details[0].message);
+  }
+
   const { name, age, grade } = req.body;
   const { id } = req.params;
 
@@ -199,11 +220,6 @@ app.use((err, req, res, next) => {
   res.status(500).send("Something went wrong!");
 });
 
-const port = process.env.PORT || 3000;
-if (process.env.NODE_ENV !== "test") {
-  app.listen(port, () => console.log(`Listening on port ${port}`));
-}
-
 // Connect to DB
 // const db = new sqlite3.Database(
 //   "./studentData.db",
@@ -249,14 +265,31 @@ if (process.env.NODE_ENV !== "test") {
 // db.run("DROP TABLE students");
 
 // Connect to DB
+// const db = new sqlite3.Database(
+//   "./studentData.db",
+//   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
+//   (err) => {
+//     if (err) {
+//       logger.error("Error connecting to database:", err.message); // Log an error
+//     } else {
+//       logger.info("Connected to the SQLite database."); // Log successful connection
+//     }
+//   }
+// );
+
+const dbPath =
+  process.env.NODE_ENV === "test" ? "./testStudentData.db" : "./studentData.db";
+
 const db = new sqlite3.Database(
-  "./studentData.db",
+  dbPath,
   sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE,
   (err) => {
     if (err) {
-      logger.error("Error connecting to database:", err.message); // Log an error
+      logger.error("Error connecting to database:", err.message);
     } else {
-      logger.info("Connected to the SQLite database."); // Log successful connection
+      logger.info("Connected to the SQLite database.");
+      // Create table after successful connection
+      createTable();
     }
   }
 );
@@ -272,9 +305,9 @@ const createTable = () => {
     )`;
   db.run(sql, (err) => {
     if (err) {
-      logger.error("Error creating table:", err.message); // Log table creation error
+      logger.error("Error creating table:", err.message);
     } else {
-      logger.info("Students table ready."); // Log success
+      logger.info("Students table ready.");
     }
   });
 };
@@ -321,5 +354,22 @@ const getAllStudents = () => {
 //     console.log("Database connection closed.");
 //   }
 // });
+
+const port = process.env.PORT || 3000;
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => console.log(`Listening on port ${port}`));
+}
+
+// Process cleanup
+process.on("SIGINT", () => {
+  db.close((err) => {
+    if (err) {
+      logger.error("Error closing the database:", err.message);
+    } else {
+      logger.info("Database connection closed.");
+    }
+    process.exit(0);
+  });
+});
 
 module.exports = app;
